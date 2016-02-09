@@ -1,0 +1,2 @@
+# rsrc_pool
+Resource pool project is written in Erlang as a tiny library. The goal of the tool is reduce the overhead of creating new resources by reusing of the same resources among multiple processes. Achieving result is better performance and throughput. The resource pool was inspired by Java Apache's commons pool and adopts API and main principals from this project. Database connection is most popular example for pooling resource.
