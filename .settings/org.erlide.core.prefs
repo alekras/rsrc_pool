@@ -1,0 +1,8 @@
+backend_version=18.0
+eclipse.preferences.version=1
+external_includes=
+external_modules=
+include_dirs=include;
+nukeOutputOnClean=false
+output_dir=_build/default/lib/rsrc_pool/ebin
+source_dirs=test;src;

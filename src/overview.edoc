@@ -1,0 +1,64 @@
+%%
+%% Copyright (C) 2013-2016 by krasnop@bellsouth.net (Alexei Krasnopolski)
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License. 
+%%
+
+@author Alexei Krasnopolski <krasnop@bellsouth.net> [http://krasnopolski.org]
+@copyright 2013-2016 Alexei Krasnopolski
+
+@doc 
+<h3>Introduction</h3>
+Resource pool project was inspired by Apache Commons Pool library and API was borrowed from there. But internal 
+implementation is completely different and is using Erlang OTP design principles and Erlang concurrent model. Resource Pool
+is Erlang application library.   
+
+<h3>Structure</h3>
+<ul>
+  <li><code>resource_pool_srv.erl</code> is a main module of Resource Pool. It is generic server and implements
+almost all Pool functionality.</li>
+  <li><code>resource_pool.erl</code> is a facade for gen_server and exposes all API functions.</li>
+  <li><code>resource_factory.erl</code> defines <i>resource_factory</i> behaviour and acts as a template and 
+simple implementation resource factory for testing purpose.</li>
+</ul>
+
+<h3>Getting started</h3>
+<ol>
+  <li>Create instance of Resource Pool<br/> 
+    <pre>{ok, Pid} = resource_pool:new(test_pool, resource_factory, [])</pre>
+    where: 
+    <ul style="list-style-type:none;">
+      <li><code>test_pool</code> - registered name of the new pool;</li>
+      <li><code>resource_factory</code> - name of a module that implements resource_factory behaviour.</li>
+    </ul>
+    New resource pool is usually shared between few processes.  
+  </li>
+  <li>Borrow resource from pool<br/>
+    <pre>Resource = resource_pool:borrow(test_pool)</pre>
+    The process can use the borrowed resource and has to return to pool after finish. 
+  </li>
+  <li>Return resource to pool<br/>
+      <pre>ok = resource_pool:return(test_pool, Resource)</pre>
+      The process can not use the <code>Resource</code> anymore.
+  </li>
+  <li>Pool can be created with options:<br/>
+    <pre>Options = [{max_active, 10}, {when_exhausted_action, fail}]</pre>
+    <pre>{ok, Pid} = resource_pool:new(test_pool, resource_factory, Options)</pre>
+    See resource_pool for more details about options. 
+  </li>
+</ol>
+@reference 
+@since 2013-03-25
+@title Erlang Resource Pool.
+@version {@version}
+
