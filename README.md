@@ -41,4 +41,4 @@ simple implementation resource factory for testing purpose.</li>
   </li>
 </ol>
 
-See [Resource Pool](https://erlangcentral.org/wiki/index.php?title=Resource_Pool) article for details.
+See [Resource Pool](https://erlangcentral.org/wiki/index.php?title=Resource_Pool) article for details and [http://erlpool.sourceforge.net/](http://erlpool.sourceforge.net/).
