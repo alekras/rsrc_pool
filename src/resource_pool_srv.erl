@@ -65,29 +65,20 @@
 %% @doc <a href="http://www.erlang.org/doc/man/gen_server.html#Module:init-1">gen_server:init/1</a>
 %% 
 init({Options, Factory_module, Resource_metadata}) ->
-  Max_active = get_option_value(max_active, Options, 8),
+  Max_active = proplists:get_value(max_active, Options, 8),
   State = #state{
             max_active = Max_active,
-            max_idle = get_option_value(max_idle, Options, Max_active),
-            min_idle = get_option_value(min_idle, Options, 0),
-            max_wait = get_option_value(max_wait, Options, infinity),
-            max_idle_time = get_option_value(max_idle_time, Options, infinity),
-            when_exhausted_action = get_option_value(when_exhausted_action, Options, block),
-            test_on_borrow = get_option_value(test_on_borrow, Options, false),
-            test_on_return = get_option_value(test_on_return, Options, false),
-            fifo = get_option_value(fifo, Options, false),
+            max_idle = proplists:get_value(max_idle, Options, Max_active),
+            min_idle = proplists:get_value(min_idle, Options, 0),
+            max_wait = proplists:get_value(max_wait, Options, infinity),
+            max_idle_time = proplists:get_value(max_idle_time, Options, infinity),
+            when_exhausted_action = proplists:get_value(when_exhausted_action, Options, block),
+            test_on_borrow = proplists:get_value(test_on_borrow, Options, false),
+            test_on_return = proplists:get_value(test_on_return, Options, false),
+            fifo = proplists:get_value(fifo, Options, false),
             factory_module = Factory_module, 
             resource_metadata = Resource_metadata},
   {ok, State}.
-
-%% @spec get_option_value(Name::atom(), Options::list({Key::atom(), Value::any()}), Default_value::any()) -> Value::any()
-%% @private
-%% @doc Returns Value for Name key from Options map or Default_value if Options does not contain Name item.
-get_option_value(Name, Options, Default_value) ->
-  case lists:keyfind(Name, 1, Options) of
-    {Name, Value} -> Value;
-    false         -> Default_value
-  end.
 
 %% @spec handle_call(Request :: term(), From :: {pid(), Tag :: term()}, State :: term()) -> Result
 %% 	Result = {reply, Reply, NewState}

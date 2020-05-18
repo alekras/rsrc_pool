@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="erl.rsrc.pool" default="zip" basedir=".">
+
+  <property file="${basedir}/build.properties"/>
+
+  <target name="zip" description="zip project for download zip file">
+    <zip destfile="${basedir}/erl.resource.pool-vsn-${version}.zip">
+      <fileset dir="${basedir}" casesensitive="yes">
+        <include name="doc/**/*"/>
+        <include name="ebin/**/*.beam"/>
+        <include name="ebin/**/*.app"/>
+        <include name="include/**/*.hrl"/>
+        <include name="src/**/*.e*"/>
+        <include name="src/**/*.src"/>
+        <include name="priv/*.png"/>
+        <include name="priv/*.css"/>
+        <include name="test/**/*"/>
+        <exclude name="*.zip"/>
+        <exclude name="test/lazy_eval.erl"/>
+        <include name="run-*.xml"/>
+        <include name="rebar.config"/>
+        <include name=".project"/>
+        <include name=".settings/**/*"/>
+        <include name="build.properties"/>
+      </fileset>
+    </zip> 
+  </target>
+
+</project>
