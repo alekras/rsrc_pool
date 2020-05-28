@@ -155,12 +155,9 @@ is_factory(Factory_module) ->
   case Module_info of
     [] -> {error, factory_not_exist};
     _ ->
-      case lists:keyfind(behaviour, 1, Module_info) of
-        {behaviour, L} -> 
-          case lists:member(resource_factory, L)  of
-            true -> true; 
-            false -> {error, not_factory}
-          end;
+      L = proplists:get_value(behaviour, Module_info, []),
+      case lists:member(resource_factory, L) of
+        true -> true; 
         false -> {error, not_factory}
       end
   end.
