@@ -1,5 +1,5 @@
 %%
-%% Copyright (C) 2013-2016 by krasnop@bellsouth.net (Alexei Krasnopolski)
+%% Copyright (C) 2013-2020 by krasnop@bellsouth.net (Alexei Krasnopolski)
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 %%
 
 %% @since 2013-03-21
-%% @copyright 2013-2016 Alexei Krasnopolski
+%% @copyright 2013-2020 Alexei Krasnopolski
 %% @author Alexei Krasnopolski <krasnop@bellsouth.net> [http://krasnopolski.org/]
 %% @version {@version}
 %% @doc
