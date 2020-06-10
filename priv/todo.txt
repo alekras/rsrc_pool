@@ -1,0 +1,10 @@
+==1. implement max_idle < 0.
+==2. implement check min_idle before removing resource when max_idle_time occurs.
+
+==3.1 test max_active < 0
+==3.2 test max_idle < 0
+==4. test activate, passivate actions.
+5. Overview.
+
+6. example
+7. article to Erlang Central.
