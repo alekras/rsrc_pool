@@ -34,7 +34,9 @@ line `-{0,0}-` show the load of containers: `-{N_active,N_idle}-`,
 
 First thing we have to do is create an instance of resource pool.
 
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, resource_metadata)
+```
 
 `test_pool` is a registered name for the new pool and `resource_factory` is a name of a module 
 that implements resource_factory behaviour. Now we can use `test_pool`
