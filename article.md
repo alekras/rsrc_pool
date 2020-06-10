@@ -45,10 +45,10 @@ of resource instances and is discussed in details in [Resource factory](#resourc
 
 The common scenario of using of the resource pool is state with a few concurrently running processes shares the same pool to borrow resources from it.
 
-### _borrow_
+### borrow
 To retrieve a resource from pool process has to call function `borrow`.
 
-```
+```erlang
   Resource = resource_pool:borrow(test_pool)
 ```
 
@@ -75,7 +75,7 @@ it is granted to caling process.
       | +-------+  +-------+ |          | +-------+  +-------+ |
       +----------------------+          +----------------------+
 
-### _return_
+### return
 Process has to return a resource to the pool after the process completes using a resource.
 In other words the resource is moved from `Active` list to `Idle` list. Now other concurrent 
 processes can borrow freed resource from the pool.
@@ -89,7 +89,7 @@ processes can borrow freed resource from the pool.
       | +-------+  +-------+ |          | +-------+  +-------+ |
       +----------------------+          +----------------------+
 
-### _add_
+### add
 Sometimes we need just add new resource to pool. Function `add` creates new resource and
 puts it into `Idle` list. 
 
@@ -102,7 +102,7 @@ puts it into `Idle` list.
       | +-------+  +-------+ |          | +-------+  +-------+ |
       +----------------------+          +----------------------+
 
-### _invalidate_
+### invalidate
 If resource failed then a process has to let know about it to the pool. `invalidate` function marks failed resource
 as unusable and pool will be destroy it shortly.
 
@@ -115,10 +115,10 @@ as unusable and pool will be destroy it shortly.
       | +-------+  +-------+ |          | +-------+  +-------+ |
       +----------------------+          +----------------------+
 
-### _typical use case_
+### typical use case
 Suppose that `resource` module implements some operations under resource.
 
-```
+```erlang
   case resource_pool:borrow(test_pool) of
     {error, E} -> io:format("Error while borrow from pool, reason: ~p", [E]);
     Resource ->
@@ -136,9 +136,9 @@ resource use then we have other flow: borrow --> use --> invalidate.
  
 ## Size limits
 We can setup some features and parameters for a resource pool during instantiation by using `option` parameter
-of `new` operation (see [new](#_new_)):
+of `new` operation (see [new](#new)):
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, resource_metadata, options)
 ```
 
@@ -164,10 +164,10 @@ responsible for size of `Active` and `Idle` containers:
 
 ### max_active 
 Maximum size of `Active` list is 8 by default. If it reaches the limit following `borrow` operation will be blocked or 
-failed (see [Borrow with exhausted pool](#_borrow-with-exhausted-pool_) for details). The value -1 (or any negative) means no limitation on `Active` list size.
+failed (see [Borrow with exhausted pool](#borrow-with-exhausted-pool) for details). The value -1 (or any negative) means no limitation on `Active` list size.
 Example of use: 
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, [], [{max_active, 20}])
 ```
 
@@ -176,7 +176,7 @@ Maximum size of `Idle` list equals max_active by default. If it reaches the limi
 will be finished with destroying of the returned resource. The value -1 (or any negative) means no limitation on `Idle` list maximum size.
 Example of use: 
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, [], [{max_active, 20}, {max_idle, 10}])
 ```
 
@@ -186,32 +186,32 @@ successfully supplies a resource to invoker and then pool will additionally crea
 min_idle condition. The value -1 (or any negative) means no limitation on Idle list minimum size.
 Example of use: 
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, [], [{max_active, 20}, {max_idle, 10}, {min_idle, 3}])
 ```
 
 ## Behaviour options
-### _Borrow with exhausted pool_
+### Borrow with exhausted pool
 When we set max_active greater then 0 and size of Active list reaches this value then the pool is exhausted and pool's behaivior depends on when_exhausted_action option value:
 <dl>
 <dt> {when_exhausted_action, fail}</dt><dd>`borrow` function on exhausted pool returns {error, pool_exhausted}.</dd>
 <dt> {when_exhausted_action, block}</dt><dd>`borrow` function on exhausted pool is blocked until a new or idle object is available.
- Waiting time period is limited by value of other option max_wait (see [Timing](#_timing_)).</dd>
+ Waiting time period is limited by value of other option max_wait (see [Timing](#timing)).</dd>
 <dt> {when_exhausted_action, grow}</dt><dd>`borrow` function on exhausted pool returns new resource and size of `Active` list grows. In this case `max_Idle` option is just ignored.</dd>
 </dl>
 Default value is `block`. 
 Example of use: 
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(test_pool, resource_factory, [], [{max_active, 20}, {when_exhausted_action, fail}])
 ```
 
-### _Resource checking_
+### Resource checking
 Resource pool can check status of managed resources. Options `test_on_borrow` and `test_on_return`
 control how pool tests resources: before providing resource to invoker `{test_on_borrow, true}` and after a resource was returned
 to pool `{test_on_return, true}`. If pool finds that the resource is not alive during test then the resource will be destroyed.
 
-### _Resource order in idle container_
+### Resource order in idle container
 Option `fifo` (first-input-first-output) controls order of extracting a resources from `Idle` list. Diagrams below illustrate this. Suppose we
 fill out `Idle` list in order: <R.1> was first, <R.2> is next, then <R.3>. Resource <R.4> is active in given moment. If
 `{fifo, true}` is set the `borrow` operation leads to situation below: resource <R.1> was came first and
@@ -240,7 +240,7 @@ If `{fifo, false}` is set it means that order will be last-input-first-output. `
 
 Default value for `fifo` is `false`.
 
-### _Timing_
+### Timing
 `max_wait` option defines the maximum amount of time to wait when the `borrow` function is invoked,
 the pool is exhausted and `when_exhausted_action` equals `block`.
 
@@ -249,31 +249,31 @@ with the extra condition that at least `min_idle` amount of object remain in the
 will be evicted from the pool due to maximum idle time limit if `max_idle_time` equals `infinity`.
 
 ## Maintenance of pool instance
-### _new_
+### new
 Lets look more closely at resource pool instantiation. `pool_name` is atom and multiple processes can use the
 registered name to access the resource pool. `resource_factory` is module name that is responsible for creating and maintenance
 of a resources. `resource_metadata` is an object that contains information for instantiation of an resource. The object is passed
 as parameter to each function of `resource_factory` to help maintain an resources. 
 
-```
+```erlang
   {ok, Pid} = resource_pool:new(pool_name, resource_factory, resource_metadata)
 ```
 
-### _clear_
+### clear
 The function sweep up (destroy) all resources from pool.
 
-```
+```erlang
   ok = resource_pool:clear(pool_name)
 ```
 
-### _close_
+### close
 The function terminates pool process and destroys all resources from pool.
 
-```
+```erlang
   ok = resource_pool:close(pool_name)
 ```
 
-### _get_num_active, get_num_idle, get_number_
+### get_num_active, get_num_idle, get_number
 The functions return number of resources in `Active`, `Idle` containers and total number of resources.
 
 ## Resource factory
@@ -299,7 +299,7 @@ different types of resources.
 </dl>
 
 ## Examples
-### _Connection pool for MySQL driver_
+### Connection pool for MySQL driver
 [Erlang MySQL client](http://sourceforge.net/projects/erlmysql)
-### _Channel pool for Rabbit MQ connection_
+### Channel pool for Rabbit MQ connection
 [AMQP channel pool example](http://sourceforge.net/projects/erlpool/files/1.0.x/erl.resource.pool.example.zip/download)
