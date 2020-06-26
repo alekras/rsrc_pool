@@ -1,6 +1,6 @@
 {application, rsrc_pool,
 	[
-    {description, "Resource pool"},
+    {description, "The goal of resource pool (rsrc_pool) Erlang library is reduce the overhead of creating new resources by reusing of the same resources among multiple processes."},
     {vsn, "1.0.3"},
     {modules, [
         resource_pool,
@@ -11,6 +11,10 @@
     {registered, []},
     {applications, [kernel, stdlib]},
     {mod, {resource_pool_srv, []}},
-    {env, []}
+    {env, []},
+%% For Hex publishing
+    {files, ["src", "priv", "test", "include", "doc", "rebar.config", "README.md", "LiCENSE", "article.md"]},
+    {licenses, ["Apache-2.0"]},
+    {links, [{"GitHub", "https://github.com/alekras/rsrc_pool"}]}
 	]
 }.

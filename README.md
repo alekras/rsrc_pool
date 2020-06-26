@@ -4,7 +4,7 @@ Resource pool project is written in Erlang as a tiny library. The goal of the to
 ## Introduction
 Resource pool project was inspired by Apache Commons Pool library and API was borrowed from there. But internal 
 implementation is completely different and is using Erlang OTP design principles and Erlang concurrent model. Resource Pool
-is Erlang application library.   
+is Erlang application library.
 
 ## Structure
 <ul>
